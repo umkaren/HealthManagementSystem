@@ -1,6 +1,7 @@
 package org.health;
 
 import java.io.*;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -11,9 +12,10 @@ public class HealthManagementSystem {
         User currentUser = null;
 
         userLog.loadUsers();
-//        SleepLog sleepLog = new SleepLog();
+        SleepLog sleepLog = new SleepLog();
         FoodLog foodLog = new FoodLog();
-        Ex
+        ExerciseLog exerciseLog = new ExerciseLog();
+
 
         Scanner scanner = new Scanner(System.in);
 
@@ -24,9 +26,13 @@ public class HealthManagementSystem {
         if (userLog.login(username)) {
             currentUser = userLog.getCurrentUser();
             System.out.println("Welcome back, " + currentUser.getUsername());
+            sleepLog.loadSleep(currentUser);
+            foodLog.loadFood(currentUser);
+            exerciseLog.loadExercise(currentUser);
         } else {
             System.out.println("Username hasn't been claimed. Creating a new account.");
             currentUser = new User(username);
+            userLog.saveUsers();
         }
 
         boolean exit = false;
@@ -46,34 +52,58 @@ public class HealthManagementSystem {
 
             switch (choice) {
                 case 1:
-                    foodLog.addFood();
+                    foodLog.addFood(currentUser);
+                    foodLog.saveFood();
                     break;
                 case 2:
-                    exerciseLog.addExercise();
+                    exerciseLog.addExercise(currentUser);
+                    exerciseLog.saveExercise();
                     break;
                 case 3:
-
+                    sleepLog.addSleep(currentUser);
+                    sleepLog.saveSleep();
+                    break;
                 case 4:
-                    // Implement Daily Caloric Balance
+//                    double calorieBalance = calculateDailyCalorieBalance(foodLog, exerciseLog);
+//                    System.out.println("Daily Calorie Balance: " + calorieBalance + " calories.");
                     break;
                 case 5:
-                    // Implement Sleep Analysis
+                    sleepAnalysis(sleepLog);
                     break;
                 case 6:
                     exerciseLog.displayAllActivities();
                     break;
                 case 7:
-                    // Implement Health Summary
+                    generateHealthSummary(foodLog, exerciseLog, sleepLog);
                     break;
                 case 8:
                     exit = true;
                     break;
                 default:
                     System.out.println("Invalid choice. Please enter a valid option.");
-
             }
-
         }
+        userLog.saveUsers();
+    }
+//    private static double calculateDailyCaloricBalance(FoodLog foodLog, ExerciseLog exerciseLog) {
+//        double consumedCalories = foodLog.calculateTotalCalories();
+//        double burnedCalories = exerciseLog.calculateTotalCalories();
+//        return consumedCalories - burnedCalories;
+//    }
 
+    private static void sleepAnalysis(SleepLog sleepLog) {
+        double averageSleepDuration = sleepLog.calculateAverageSleepDuration();
+        System.out.println("Average Sleep Duration: " + averageSleepDuration + " hours");
+    }
+
+    private static void generateHealthSummary(FoodLog foodLog, ExerciseLog exerciseLog, SleepLog sleepLog) {
+//        double consumedCalories = foodLog.calculateTotalCalories();
+//        double burnedCalories = exerciseLog.calculateTotalCalories();
+        double averageSleepDuration = sleepLog.calculateAverageSleepDuration();
+
+        System.out.println("Health Summary for " + LocalDate.now());
+//        System.out.println("Caloric Intake: " + consumedCalories + " calories");
+//        System.out.println("Calories Burned: " + burnedCalories + " calories");
+        System.out.println("Average Sleep Duration: " + averageSleepDuration + " hours");
     }
 }

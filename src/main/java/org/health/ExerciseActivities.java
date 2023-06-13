@@ -5,7 +5,7 @@ import java.time.LocalDate;
 class ExerciseActivities {
     private LocalDate date;
 
-    private String username;
+    private User user;
     private String type;
     private int duration;
     private double caloriesBurned;
@@ -18,12 +18,12 @@ class ExerciseActivities {
         this.date = date;
     }
 
-    public String getUsername() {
-        return username;
+    public User getUser() {
+        return user;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getType() {
@@ -50,8 +50,9 @@ class ExerciseActivities {
         this.caloriesBurned = caloriesBurned;
     }
 
-    public ExerciseActivities(LocalDate date, String username, String type, int duration, double caloriesBurned) {
+    public ExerciseActivities(LocalDate date, User user, String type, int duration, double caloriesBurned) {
         this.date = date;
+        this.user = user;
         this.type = type;
         this.duration = duration;
         this.caloriesBurned = caloriesBurned;
@@ -60,7 +61,7 @@ class ExerciseActivities {
     public String toStringWithDelimiters() {
         StringBuilder sb = new StringBuilder();
         sb.append(date).append("|");
-        sb.append(username);
+        sb.append(user.getUsername()).append("|");
         sb.append(type).append("|");
         sb.append(duration).append("|");
         sb.append(caloriesBurned).append("|");
@@ -68,18 +69,17 @@ class ExerciseActivities {
     }
 
     //convert ExerciseActivities object from a string with delimiters
-    public static ExerciseActivities fromStringWithDelimiters(String line) {
+    public static ExerciseActivities fromStringWithDelimiters(String line, User currentUser) {
         String[] parts = line.split("\\|");
         if (parts.length != 5) {
             throw new IllegalStateException("Invalid format");
         }
 
         LocalDate date = LocalDate.parse(parts[0]);
-        String username = parts[1];
         String type = parts[2];
         int duration = Integer.parseInt(parts[3]);
         double caloriesBurned = Double.parseDouble(parts[4]);
 
-        return new ExerciseActivities(date, username, type, duration, caloriesBurned);
+        return new ExerciseActivities(date, currentUser, type, duration, caloriesBurned);
     }
 }

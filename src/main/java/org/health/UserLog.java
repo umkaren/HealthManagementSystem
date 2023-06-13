@@ -11,6 +11,7 @@ public class UserLog {
 
     public UserLog() {
         users = new ArrayList<>();
+        currentUser = null;
     }
 
     public boolean login(String username) {
@@ -55,4 +56,5 @@ public class UserLog {
             System.out.println("Error saving users to file: " + e.getMessage());
         }
     }
+
 }

@@ -57,7 +57,7 @@ public class ExerciseLog {
         }
     }
 
-    public void addExercise() {
+    public void addExercise(User currentUser) {
         System.out.println("Exercise log details");
         System.out.println("Enter exercise type: ");
         String exerciseType = this.scanner.nextLine();
@@ -87,7 +87,7 @@ public class ExerciseLog {
 
         LocalDate date = LocalDate.now();
         if(currentUser != null) {
-            ExerciseActivities exerciseActivities = new ExerciseActivities(date, currentUser.getUsername(), exerciseType, duration, caloriesBurned);
+            ExerciseActivities exerciseActivities = new ExerciseActivities(date, currentUser, exerciseType, duration, caloriesBurned);
             currentUser.addExerciseActivity(exerciseActivities);
             activities.add(exerciseActivities);
             System.out.println("New exercise logged successfully.");
@@ -104,7 +104,7 @@ public class ExerciseLog {
             while (exerciseIterator.hasNext()) {
                 ExerciseActivities exerciseActivities = (ExerciseActivities) exerciseIterator.next();
                 System.out.println("\n Date: " + exerciseActivities.getDate());
-                System.out.println("Username: " + exerciseActivities.getUsername());
+                System.out.println("Username: " + exerciseActivities.getUser());
                 System.out.println("Exercise name: " + exerciseActivities.getType());
                 System.out.println("Duration: " + exerciseActivities.getDuration());
                 System.out.println("Calories Burned: " + exerciseActivities.getCaloriesBurned());
